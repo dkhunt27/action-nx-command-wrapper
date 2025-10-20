@@ -1,0 +1,62 @@
+{
+  "name": "action-nx-command-wrapper",
+  "version": "0.0.0",
+  "description": "Nx command wrapper for @dkhunt27/action-nx-command",
+  "keywords": [
+    "nx",
+    "github-actions",
+    "typescript"
+  ],
+  "homepage": "https://github.com/dkhunt27/action-nx-command-wrapper",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "types": "./dist/index.d.ts",
+  "sideEffects": false,
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsdown",
+    "dev": "tsdown --watch",
+    "lint": "biome check --error-on-warnings",
+    "format": "biome format --write",
+    "test": "vitest run --coverage",
+    "size": "size-limit"
+  },
+  "author": "dkhunt27@gmail.com",
+  "repository": "github:dkhunt27/action-nx-command-wrapper",
+  "bugs": {
+    "url": "https://github.com/dkhunt27/action-nx-command-wrapper/issues"
+  },
+  "license": "MIT",
+  "engines": {
+    "node": ">=20"
+  },
+  "size-limit": [
+    {
+      "path": "dist/browser.js",
+      "limit": "3.5 KB"
+    }
+  ],
+  "devDependencies": {
+    "@biomejs/biome": "2.2.3",
+    "@size-limit/preset-small-lib": "^8.2.4",
+    "@types/node": "^22.18.1",
+    "@vitest/coverage-istanbul": "3.2.4",
+    "size-limit": "^8.2.4",
+    "tsdown": "^0.15.0",
+    "typescript": "^5.9.2",
+    "vitest": "^3.2.4"
+  },
+  "dependencies": {
+    "@actions/core": "^1.11.1",
+    "@actions/exec": "^1.1.1",
+    "@actions/github": "^6.0.1",
+    "@octokit/webhooks-types": "^7.6.1"
+  }
+}

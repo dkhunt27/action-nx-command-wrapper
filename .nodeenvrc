@@ -1,0 +1,12 @@
+[nodeenv]
+node = 'latest'
+npm = 'latest'
+with_npm = False
+jobs = '2'
+without_ssl = False
+debug = False
+profile = False
+make = 'make'
+prebuilt = True
+ignore_ssl_certs = False
+mirror = None
