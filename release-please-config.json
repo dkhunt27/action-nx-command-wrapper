@@ -4,8 +4,8 @@
   "prerelease": true,
   "packages": {
     ".": {
-      "package-name": "@bgub/ts-base",
-      "extra-files": ["jsr.json"],
+      "package-name": "@dkhunt27/action-nx-command-wrapper",
+      "extra-files": [],
       "prerelease-type": "alpha"
     }
   }
