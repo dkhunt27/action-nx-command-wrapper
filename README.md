@@ -1,19 +1,14 @@
 <h1 align="center" style="text-align: center; width: fit-content; margin-left: auto; margin-right: auto;">ts-base</h1>
 
 <p align="center">
-  <a href="https://github.com/bgub/ts-base/actions">CI</a>
+  <a href="https://github.com/dkhunt27/action-nx-command-wrapper/actions">CI</a>
   ·
-  <a href="https://github.com/bgub/ts-base/releases">Releases</a>
+  <a href="https://github.com/dkhunt27/action-nx-command-wrapper/releases">Releases</a>
   ·
-  <a href="https://github.com/bgub/ts-base/issues">Issues</a>
+  <a href="https://github.com/dkhunt27/action-nx-command-wrapper/issues">Issues</a>
 </p>
 
 <span align="center">
-
-[![npm](https://img.shields.io/npm/v/%40bgub%2Fts-base?logo=npm&label=npm)](https://www.npmjs.com/package/@bgub/ts-base)
-[![CI](https://github.com/bgub/ts-base/actions/workflows/ci.yml/badge.svg)](https://github.com/bgub/ts-base/actions)
-[![Codecov](https://codecov.io/github/bgub/ts-base/branch/main/graph/badge.svg)](https://codecov.io/github/bgub/ts-base)
-[![Sponsor](https://img.shields.io/badge/sponsor-%E2%9D%A4-ff69b4)](https://github.com/sponsors/bgub)
 
 </span>
 
@@ -62,3 +57,6 @@ console.log(getSecureRandomId());
 - Merge the automated Release PR created by Release Please
 - Manually run the "Release" workflow to publish to npm and JSR with provenance
 
+## Template
+
+Started with [ts-base](https://github.com/bgub/ts-base)
