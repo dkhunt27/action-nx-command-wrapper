@@ -37,6 +37,10 @@ TypeScript library starter that works out-of-the-box with Node, Deno, Bun, and t
 Install dependencies and run scripts:
 
 ```bash
+# first setup node using nodeenv; not necessary if already have node v20+ installed
+brew install nodeenv
+nodeenv .node
+
 npm install
 npm run lint
 npm run  test
