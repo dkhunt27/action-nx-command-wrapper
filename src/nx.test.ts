@@ -1,14 +1,15 @@
 import * as core from '@actions/core';
 import { type MockInstance, vi } from 'vitest';
 import * as gitUtils from './git-utilities.ts';
-import { runNxAffected, runNxAll, runNxProjects } from './nx.ts';
-import type { Inputs } from './types.ts';
+import { runShowNxAffectedList, runTargetedNxAffected, runTargetedNxAll, runTargetedNxProjects } from './nx.ts';
+import type { NxCommandInputs } from './types.ts';
 import * as utils from './utilities.ts';
 
 describe('nx tests', () => {
   let execPromisifiedMock: MockInstance;
   let retrieveGitBoundariesMock: MockInstance;
-  let inputs: Inputs;
+  let coreOutputMock: MockInstance;
+  let inputs: NxCommandInputs;
 
   beforeEach(() => {
     // silence logging
@@ -17,6 +18,7 @@ describe('nx tests', () => {
     vi.spyOn(core, 'startGroup').mockImplementation(() => {});
     vi.spyOn(core, 'endGroup').mockImplementation(() => {});
 
+    coreOutputMock = vi.spyOn(core, 'setOutput').mockImplementation(() => {});
     execPromisifiedMock = vi.spyOn(utils, 'execPromisified');
     retrieveGitBoundariesMock = vi.spyOn(gitUtils, 'retrieveGitBoundaries');
 
@@ -27,8 +29,8 @@ describe('nx tests', () => {
 
     // Default inputs
     inputs = {
-      affected: true,
-      all: false,
+      command: 'targetedAffected',
+      affectedToIgnore: [],
       args: [],
       baseBoundaryOverride: '',
       headBoundaryOverride: '',
@@ -41,15 +43,18 @@ describe('nx tests', () => {
     };
   });
 
+  afterEach(() => {
+    vi.resetAllMocks();
+  });
+
   describe('runNxAll', () => {
-    test('should inputs are all, should run as expected', async () => {
+    test('when command is targetedAll, should run as expected', async () => {
       execPromisifiedMock.mockResolvedValue('done');
 
       inputs.targets = ['build', 'test'];
-      inputs.affected = false;
-      inputs.all = true;
+      inputs.command = 'targetedAll';
 
-      await expect(runNxAll(inputs, [])).resolves.toBeUndefined();
+      await expect(runTargetedNxAll(inputs, [])).resolves.toBeUndefined();
 
       expect(execPromisifiedMock).toHaveBeenCalledTimes(2);
       expect(execPromisifiedMock).toHaveBeenNthCalledWith(1, 'npx nx run-many --target=build ');
@@ -58,14 +63,13 @@ describe('nx tests', () => {
   });
 
   describe('runNxAffected', () => {
-    test('should inputs are affected, should run as expected', async () => {
+    test('when command is targetedAffected, should run as expected', async () => {
       execPromisifiedMock.mockResolvedValue('done');
 
       inputs.targets = ['build', 'test'];
-      inputs.affected = true;
-      inputs.all = false;
+      inputs.command = 'targetedAffected';
 
-      await expect(runNxAffected(inputs, [])).resolves.toBeUndefined();
+      await expect(runTargetedNxAffected(inputs, [])).resolves.toBeUndefined();
 
       expect(execPromisifiedMock).toHaveBeenCalledTimes(2);
       expect(execPromisifiedMock).toHaveBeenNthCalledWith(
@@ -80,19 +84,37 @@ describe('nx tests', () => {
   });
 
   describe('runNxProjects', () => {
-    test('should inputs are projects, should run as expected', async () => {
+    test('when command is targetedProjects, should run as expected', async () => {
       execPromisifiedMock.mockResolvedValue('done');
 
       inputs.targets = ['build', 'test'];
-      inputs.affected = false;
-      inputs.all = false;
+      inputs.command = 'targetedProjects';
       inputs.projects = ['project1', 'project2'];
 
-      await expect(runNxProjects(inputs, [])).resolves.toBeUndefined();
+      await expect(runTargetedNxProjects(inputs, [])).resolves.toBeUndefined();
 
       expect(execPromisifiedMock).toHaveBeenCalledTimes(2);
       expect(execPromisifiedMock).toHaveBeenNthCalledWith(1, 'npx nx run-many --target=build --projects=project1,project2 ');
       expect(execPromisifiedMock).toHaveBeenNthCalledWith(2, 'npx nx run-many --target=test --projects=project1,project2 ');
+    });
+  });
+
+  describe('runShowNxAffectedList', () => {
+    test('when command is showAffectedList, should run as expected', async () => {
+      execPromisifiedMock.mockResolvedValue(['project1', 'project2']);
+
+      inputs.targets = ['build', 'test'];
+      inputs.command = 'showAffectedList';
+      inputs.projects = [];
+
+      await expect(runShowNxAffectedList(inputs, [])).resolves.toEqual(['project1', 'project2']);
+
+      expect(execPromisifiedMock).toHaveBeenCalledTimes(1);
+      expect(execPromisifiedMock).toHaveBeenCalledWith(
+        'npx nx show projects --affected --base=base-sha --head=head-sha --withTarget=build,test',
+      );
+      expect(coreOutputMock).toHaveBeenCalledWith('affected', ['project1', 'project2']);
+      expect(coreOutputMock).toHaveBeenCalledWith('hasAffected', true);
     });
   });
 });

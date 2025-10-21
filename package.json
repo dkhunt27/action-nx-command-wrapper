@@ -1,5 +1,5 @@
 {
-  "name": "@dkhunt27/action-nx-command-wrapper",
+  "name": "action-nx-command-wrapper",
   "version": "0.0.0",
   "description": "Nx command wrapper for @dkhunt27/action-nx-command",
   "keywords": [
@@ -25,8 +25,7 @@
     "dev": "tsdown --watch",
     "lint": "biome check --error-on-warnings",
     "format": "biome format --write",
-    "test": "vitest run --coverage",
-    "size": "size-limit"
+    "test": "vitest run --coverage"
   },
   "author": "dkhunt27@gmail.com",
   "repository": "github:dkhunt27/action-nx-command-wrapper",
@@ -37,12 +36,6 @@
   "engines": {
     "node": ">=20"
   },
-  "size-limit": [
-    {
-      "path": "dist/browser.js",
-      "limit": "3.5 KB"
-    }
-  ],
   "devDependencies": {
     "@biomejs/biome": "2.2.3",
     "@size-limit/preset-small-lib": "^8.2.4",

@@ -1,13 +1,13 @@
-export type Inputs = {
-  affected: boolean;
-  all: boolean;
-  args: readonly string[];
+export type NxCommandInputs = {
+  affectedToIgnore: string[];
+  args: string[];
+  command: 'targetedAll' | 'targetedProjects' | 'targetedAffected' | 'showAffectedList';
   baseBoundaryOverride: string;
   headBoundaryOverride: string;
   isWorkflowsCiPipeline: boolean;
   parallel: number;
-  projects: readonly string[];
+  projects: string[];
   setNxBranchToPrNumber: boolean;
-  targets: readonly string[];
+  targets: string[];
   workingDirectory: string;
 };
