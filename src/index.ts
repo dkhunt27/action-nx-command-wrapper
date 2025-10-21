@@ -3,37 +3,12 @@ import * as github from '@actions/github';
 import type { PullRequest } from '@octokit/webhooks-types';
 import { runNxAffected, runNxAll, runNxProjects } from './nx.ts';
 import type { Inputs } from './types.ts';
-
-export const validateInputs = (inputs: Inputs): void => {
-  core.info('Validating inputs...');
-
-  const hasAll = inputs.all;
-  const hasAffected = inputs.affected;
-  const hasProjects = inputs.projects.length > 0;
-
-  if (!hasAffected && !hasAll && !hasProjects) {
-    throw new Error('Must have all, affected, or projects listed.');
-  }
-
-  if (hasProjects && (hasAffected || hasAll)) {
-    throw new Error('Cannot have projects listed and affected or all true.');
-  }
-
-  if (hasAffected && (hasAll || hasProjects)) {
-    throw new Error('Cannot have affected true and all true or projects listed.');
-  }
-
-  if (hasAll && (hasAffected || hasProjects)) {
-    throw new Error('Cannot have all true and affected true or projects listed.');
-  }
-
-  core.info('Inputs are valid.');
-};
+import * as utils from './utilities.ts';
 
 export const runNx = async (inputs: Inputs): Promise<void> => {
   const args = inputs.args as string[];
 
-  validateInputs(inputs);
+  utils.validateInputs(inputs);
 
   core.info(`args: ${args.join()}`);
 
