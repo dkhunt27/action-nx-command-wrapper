@@ -1,9 +1,9 @@
-import * as utils from './utilities.ts';
+import * as core from '@actions/core';
+import { type MockInstance, vi } from 'vitest';
 import * as gitUtils from './git-utilities.ts';
-import { vi, type MockInstance } from 'vitest';
 import { runNxAffected, runNxAll, runNxProjects } from './nx.ts';
 import type { Inputs } from './types.ts';
-import * as core from '@actions/core';
+import * as utils from './utilities.ts';
 
 describe('nx tests', () => {
   let execPromisifiedMock: MockInstance;
@@ -20,7 +20,10 @@ describe('nx tests', () => {
     execPromisifiedMock = vi.spyOn(utils, 'execPromisified');
     retrieveGitBoundariesMock = vi.spyOn(gitUtils, 'retrieveGitBoundaries');
 
-    retrieveGitBoundariesMock.mockResolvedValue({ base: 'base-sha', head: 'head-sha' });
+    retrieveGitBoundariesMock.mockResolvedValue({
+      base: 'base-sha',
+      head: 'head-sha',
+    });
 
     // Default inputs
     inputs = {
@@ -65,8 +68,14 @@ describe('nx tests', () => {
       await expect(runNxAffected(inputs, [])).resolves.toBeUndefined();
 
       expect(execPromisifiedMock).toHaveBeenCalledTimes(2);
-      expect(execPromisifiedMock).toHaveBeenNthCalledWith(1, 'npx nx affected --target=build --base=base-sha --head=head-sha ');
-      expect(execPromisifiedMock).toHaveBeenNthCalledWith(2, 'npx nx affected --target=test --base=base-sha --head=head-sha ');
+      expect(execPromisifiedMock).toHaveBeenNthCalledWith(
+        1,
+        'npx nx affected --target=build --base=base-sha --head=head-sha ',
+      );
+      expect(execPromisifiedMock).toHaveBeenNthCalledWith(
+        2,
+        'npx nx affected --target=test --base=base-sha --head=head-sha ',
+      );
     });
   });
 

@@ -1,6 +1,6 @@
-import type { Inputs } from './types';
-import * as github from '@actions/github';
+import type * as github from '@actions/github';
 import type { PullRequest, PushEvent } from '@octokit/webhooks-types';
+import type { Inputs } from './types';
 import { execPromisified } from './utilities';
 
 export const retrieveGitBoundaries = async (params: {

@@ -1,9 +1,8 @@
 import * as core from '@actions/core';
-import type { PullRequest } from '@octokit/webhooks-types';
 import * as github from '@actions/github';
-
-import type { Inputs } from './types.ts';
+import type { PullRequest } from '@octokit/webhooks-types';
 import { runNxAffected, runNxAll, runNxProjects } from './nx.ts';
+import type { Inputs } from './types.ts';
 
 export const validateInputs = (inputs: Inputs): void => {
   core.info('Validating inputs...');

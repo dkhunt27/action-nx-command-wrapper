@@ -1,8 +1,8 @@
-import { validateInputs, runNx } from './index.ts';
-import type { Inputs } from './types.ts';
 import * as core from '@actions/core';
-import * as nx from './nx.ts';
 import type { MockInstance } from 'vitest';
+import { runNx, validateInputs } from './index.ts';
+import * as nx from './nx.ts';
+import type { Inputs } from './types.ts';
 
 describe('nx command (index) tests', () => {
   let inputs: Inputs;
@@ -52,18 +52,58 @@ describe('nx command (index) tests', () => {
 
     test.each([
       // cant all be true
-      { affected: true, all: true, projects: ['projA'], error: 'Cannot have projects listed and affected or all true.' },
+      {
+        affected: true,
+        all: true,
+        projects: ['projA'],
+        error: 'Cannot have projects listed and affected or all true.',
+      },
       // cant have projects and affected/all
-      { affected: true, all: false, projects: ['projA'], error: 'Cannot have projects listed and affected or all true.' },
-      { affected: false, all: true, projects: ['projA'], error: 'Cannot have projects listed and affected or all true.' },
+      {
+        affected: true,
+        all: false,
+        projects: ['projA'],
+        error: 'Cannot have projects listed and affected or all true.',
+      },
+      {
+        affected: false,
+        all: true,
+        projects: ['projA'],
+        error: 'Cannot have projects listed and affected or all true.',
+      },
       // cant have all and projects/affected
-      { affected: false, all: true, projects: ['projA'], error: 'Cannot have projects listed and affected or all true.' },
-      { affected: true, all: true, projects: [], error: 'Cannot have affected true and all true or projects listed.' },
+      {
+        affected: false,
+        all: true,
+        projects: ['projA'],
+        error: 'Cannot have projects listed and affected or all true.',
+      },
+      {
+        affected: true,
+        all: true,
+        projects: [],
+        error: 'Cannot have affected true and all true or projects listed.',
+      },
       // cant have affected and projects/affected
-      { affected: true, all: false, projects: ['projA'], error: 'Cannot have projects listed and affected or all true.' },
-      { affected: true, all: true, projects: [], error: 'Cannot have affected true and all true or projects listed.' },
+      {
+        affected: true,
+        all: false,
+        projects: ['projA'],
+        error: 'Cannot have projects listed and affected or all true.',
+      },
+      {
+        affected: true,
+        all: true,
+        projects: [],
+        error: 'Cannot have affected true and all true or projects listed.',
+      },
       // cant all be false
-      { affected: false, all: false, projects: [], error: 'Must have all, affected, or projects listed.' },
+      {
+        affected: false,
+        all: false,
+        projects: [],
+        error: 'Must have all, affected, or projects listed.',
+      },
     ])('Should throw an error when affected: %s %s', async ({ affected, all, projects, error }) => {
       inputs.affected = affected;
       inputs.all = all;
@@ -75,20 +115,44 @@ describe('nx command (index) tests', () => {
 
   describe('runNx', () => {
     test.each([
-      { affected: false, all: false, projects: ['projA'], runNxAll: 0, runNxProjects: 1, runNxAffected: 0 },
-      { affected: false, all: true, projects: [], runNxAll: 1, runNxProjects: 0, runNxAffected: 0 },
-      { affected: true, all: false, projects: [], runNxAll: 0, runNxProjects: 0, runNxAffected: 1 },
-    ])('should run expected runNx when affected: %s all: %s projects: %s', async ({ affected, all, projects, runNxAll, runNxProjects, runNxAffected }) => {
-      inputs.affected = affected;
-      inputs.all = all;
-      inputs.projects = projects;
+      {
+        affected: false,
+        all: false,
+        projects: ['projA'],
+        runNxAll: 0,
+        runNxProjects: 1,
+        runNxAffected: 0,
+      },
+      {
+        affected: false,
+        all: true,
+        projects: [],
+        runNxAll: 1,
+        runNxProjects: 0,
+        runNxAffected: 0,
+      },
+      {
+        affected: true,
+        all: false,
+        projects: [],
+        runNxAll: 0,
+        runNxProjects: 0,
+        runNxAffected: 1,
+      },
+    ])(
+      'should run expected runNx when affected: %s all: %s projects: %s',
+      async ({ affected, all, projects, runNxAll, runNxProjects, runNxAffected }) => {
+        inputs.affected = affected;
+        inputs.all = all;
+        inputs.projects = projects;
 
-      await runNx(inputs);
+        await runNx(inputs);
 
-      expect(runNxAllMock).toHaveBeenCalledTimes(runNxAll);
-      expect(runNxProjectsMock).toHaveBeenCalledTimes(runNxProjects);
-      expect(runNxAffectedMock).toHaveBeenCalledTimes(runNxAffected);
-    });
+        expect(runNxAllMock).toHaveBeenCalledTimes(runNxAll);
+        expect(runNxProjectsMock).toHaveBeenCalledTimes(runNxProjects);
+        expect(runNxAffectedMock).toHaveBeenCalledTimes(runNxAffected);
+      },
+    );
 
     test.each([
       // cant all be true

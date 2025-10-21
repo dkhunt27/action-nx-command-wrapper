@@ -1,7 +1,7 @@
 import * as core from '@actions/core';
-import type { Inputs } from './types';
 import * as github from '@actions/github';
 import * as gitUtils from './git-utilities.ts';
+import type { Inputs } from './types';
 import { execPromisified } from './utilities.ts';
 
 export const runNxAll = async (inputs: Inputs, args: string[]): Promise<void> => {
@@ -28,7 +28,9 @@ export const runNxProjects = async (inputs: Inputs, args: string[]): Promise<voi
   for (const target of inputs.targets) {
     core.info(`Target: ${target}`);
 
-    promises.push(execPromisified(`npx nx run-many --target=${target} --projects=${inputs.projects.join(',')} ${args.join(' ')}`));
+    promises.push(
+      execPromisified(`npx nx run-many --target=${target} --projects=${inputs.projects.join(',')} ${args.join(' ')}`),
+    );
   }
 
   await Promise.all(promises);

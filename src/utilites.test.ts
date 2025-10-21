@@ -1,5 +1,5 @@
-import { vi, type MockInstance } from 'vitest';
 import * as core from '@actions/core';
+import { type MockInstance, vi } from 'vitest';
 import { execPromisified } from './utilities';
 
 describe('nx tests', () => {
@@ -17,11 +17,17 @@ describe('nx tests', () => {
 
   describe('execPromisified', async () => {
     test('when exec returns stdout, should resolve', async () => {
-      execPromisifiedMock.mockResolvedValue({ stdout: 'stdout', stderr: undefined });
+      execPromisifiedMock.mockResolvedValue({
+        stdout: 'stdout',
+        stderr: undefined,
+      });
       await expect(execPromisified('some command', execPromisifiedMock)).resolves.toBe('stdout');
     });
     test('when exec returns stderr, should resolve', async () => {
-      execPromisifiedMock.mockResolvedValue({ stdout: 'stdout', stderr: 'stderr' });
+      execPromisifiedMock.mockResolvedValue({
+        stdout: 'stdout',
+        stderr: 'stderr',
+      });
       await expect(execPromisified('some command', execPromisifiedMock)).rejects.toBe('stderr');
     });
   });
