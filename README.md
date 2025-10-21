@@ -34,21 +34,21 @@ npm run  build
 Node usage:
 
 ```ts
-import { runNx } from "@dkhunt27/action-nx-command-wrapper";
+import { runNx, type NxCommandInputs } from "action-nx-command-wrapper";
 
-const inputs = {
-  affected: true,
-  all: false,
-  args: [],
-  baseBoundaryOverride: '',
-  headBoundaryOverride: '',
-  isWorkflowsCiPipeline: false,
-  parallel: 3,
-  projects: [],
-  setNxBranchToPrNumber: false,
-  targets: [],
-  workingDirectory: '',
-};
+const inputs: NxCommandInputs = {
+      command: 'targetedAffected',
+      affectedToIgnore: [],
+      args: [],
+      baseBoundaryOverride: '',
+      headBoundaryOverride: '',
+      isWorkflowsCiPipeline: false,
+      parallel: 3,
+      projects: [],
+      setNxBranchToPrNumber: false,
+      targets: [],
+      workingDirectory: '',
+    };
 
 await runNx(inputs);
 ```
