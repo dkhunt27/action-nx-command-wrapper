@@ -56,6 +56,7 @@ describe('utilities tests', () => {
       { command: 'targetedProjects', projects: ['projA'] },
       { command: 'targetedAll', projects: [] },
       { command: 'targetedAffected', projects: [] },
+      { command: 'showAffectedList', projects: [] },
     ])('should return valid when command: %s', async ({ command, projects }) => {
       inputs.command = command as never;
       inputs.projects = projects;
@@ -63,10 +64,18 @@ describe('utilities tests', () => {
       expect(validateInputs(inputs)).toBeUndefined();
     });
 
-    test('Should throw an error when invalid command', () => {
-      inputs.command = 'invalidCommand' as never;
+    test.each([
+      { command: 'targetedProjects', projects: [], targets: [], error: 'Projects cannot be empty' },
+      { command: 'targetedProjects', projects: ['projA'], targets: [], error: 'Targets cannot be empty' },
+      { command: 'targetedAll', projects: [], targets: [], error: 'Targets cannot be empty' },
+      { command: 'targetedAffected', projects: [], targets: [], error: 'Targets cannot be empty' },
+      { command: 'showAffectedList', projects: ['projA'], targets: [], error: 'Projects must be empty' },
+    ])('Should throw an error when inputs are %s', ({ command, projects, targets, error }) => {
+      inputs.command = command as never;
+      inputs.projects = projects;
+      inputs.targets = targets;
 
-      expect(() => validateInputs(inputs)).toThrowError(`Invalid command`);
+      expect(() => validateInputs(inputs)).toThrowError(error);
     });
   });
 });
