@@ -19,14 +19,14 @@ describe('utilities tests', () => {
   describe('execPromisified', async () => {
     test('when exec returns stdout, should resolve', async () => {
       execPromisifiedMock.mockResolvedValue({
-        stdout: 'stdout',
+        stdout: 'stdout\n',
         stderr: undefined,
       });
-      await expect(execPromisified('some command', execPromisifiedMock)).resolves.toBe('stdout');
+      await expect(execPromisified('some command', execPromisifiedMock)).resolves.toEqual(['stdout']);
     });
     test('when exec returns stderr, should resolve', async () => {
       execPromisifiedMock.mockResolvedValue({
-        stdout: 'stdout',
+        stdout: 'stdout\n',
         stderr: 'stderr',
       });
       await expect(execPromisified('some command', execPromisifiedMock)).rejects.toBe('stderr');

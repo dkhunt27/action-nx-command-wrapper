@@ -11,8 +11,8 @@ describe('git-utilities tests', () => {
     vi.spyOn(utils, 'execPromisified');
 
     vi.spyOn(utils, 'execPromisified').mockImplementation((ref) => {
-      if (ref.indexOf('HEAD~1') > -1) return Promise.resolve('base-sha');
-      if (ref.indexOf('HEAD') > -1) return Promise.resolve('head-sha');
+      if (ref.indexOf('HEAD~1') > -1) return Promise.resolve(['base-sha']);
+      if (ref.indexOf('HEAD') > -1) return Promise.resolve(['head-sha']);
       return Promise.reject('unknown ref');
     });
   });

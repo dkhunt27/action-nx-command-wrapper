@@ -101,7 +101,7 @@ describe('nx tests', () => {
 
   describe('runShowNxAffectedList', () => {
     test('when command is showAffectedList, should run as expected', async () => {
-      execPromisifiedMock.mockResolvedValue('project1\nproject2');
+      execPromisifiedMock.mockResolvedValue(['project1', 'project2']);
 
       inputs.targets = ['build', 'test'];
       inputs.command = 'showAffectedList';

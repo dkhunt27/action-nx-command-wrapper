@@ -84,8 +84,8 @@ export const runShowNxAffectedList = async (inputs: NxCommandInputs, args: strin
     githubContextPayload: github.context.payload,
   });
 
-  core.info(`Base boundary: ${base}`);
-  core.info(`Head boundary: ${head}`);
+  core.info(`Base boundary: ${base}aaa`);
+  core.info(`Head boundary: ${head}bbb`);
 
   if (inputs.targets.length > 0) {
     core.info(`Using targets: ${inputs.targets.join(',')}`);
@@ -98,11 +98,7 @@ export const runShowNxAffectedList = async (inputs: NxCommandInputs, args: strin
 
   const results = await execPromisified(cmd);
 
-  const affected = results
-    .split(/\s+/) // split on any whitespace including newlines
-    .map((x) => x.trim())
-    .filter((x) => !inputs.affectedToIgnore.includes(x))
-    .filter((x) => x.length > 0);
+  const affected = results.filter((project) => !inputs.affectedToIgnore.includes(project));
 
   core.info(`Affected Project List: ${affected}`);
 

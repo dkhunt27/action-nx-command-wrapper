@@ -4,13 +4,17 @@ import type { NxCommandInputs } from './types.ts';
 const util = require('node:util');
 const exec = util.promisify(require('node:child_process').exec);
 
-export const execPromisified = async (command: string, execOverride?: typeof exec): Promise<string> => {
+export const execPromisified = async (command: string, execOverride?: typeof exec): Promise<string[]> => {
   execOverride = execOverride ?? exec;
   const { stdout, stderr } = await execOverride(command);
   if (stderr) {
     throw stderr;
   }
-  return stdout;
+
+  return stdout
+    .split(/\s+/) // split on any whitespace including newlines
+    .map((x: string) => x.trim())
+    .filter((x: string) => x.length > 0);
 };
 
 export const validateInputs = (inputs: NxCommandInputs): void => {
