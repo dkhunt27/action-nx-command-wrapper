@@ -1,10 +1,10 @@
 import type * as github from '@actions/github';
 import type { PullRequest, PushEvent } from '@octokit/webhooks-types';
-import type { Inputs } from './types';
+import type { NxCommandInputs } from './types';
 import { execPromisified } from './utilities';
 
 export const retrieveGitBoundaries = async (params: {
-  inputs: Inputs;
+  inputs: NxCommandInputs;
   githubContextEventName: string;
   githubContextPayload: typeof github.context.payload;
 }): Promise<{ base: string; head: string }> => {

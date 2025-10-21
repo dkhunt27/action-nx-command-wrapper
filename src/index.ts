@@ -1,11 +1,11 @@
 import * as core from '@actions/core';
 import * as github from '@actions/github';
 import type { PullRequest } from '@octokit/webhooks-types';
-import { runNxAffected, runNxAll, runNxProjects } from './nx.ts';
-import type { Inputs } from './types.ts';
+import { runShowNxAffectedList, runTargetedNxAffected, runTargetedNxAll, runTargetedNxProjects } from './nx.ts';
+import type { NxCommandInputs } from './types.ts';
 import * as utils from './utilities.ts';
 
-export const runNx = async (inputs: Inputs): Promise<void> => {
+export const runNx = async (inputs: NxCommandInputs): Promise<string[] | undefined> => {
   const args = inputs.args as string[];
 
   utils.validateInputs(inputs);
@@ -23,13 +23,18 @@ export const runNx = async (inputs: Inputs): Promise<void> => {
     args.push(`--parallel=${inputs.parallel.toString()}`);
   }
 
-  if (inputs.all === true) {
-    return runNxAll(inputs, args);
-  } else if (inputs.projects.length > 0) {
-    return runNxProjects(inputs, args);
-  } else if (inputs.affected === true) {
-    return runNxAffected(inputs, args);
-  } else {
-    throw new Error('No valid execution path found.');
+  switch (inputs.command) {
+    case 'targetedAll':
+      return runTargetedNxAll(inputs, args);
+    case 'targetedProjects':
+      return runTargetedNxProjects(inputs, args);
+    case 'targetedAffected':
+      return runTargetedNxAffected(inputs, args);
+    case 'showAffectedList':
+      return runShowNxAffectedList(inputs, args);
+    default:
+      throw new Error(`Invalid command: ${inputs.command}`);
   }
 };
+
+export type { NxCommandInputs } from './types.ts';

@@ -1,9 +1,9 @@
 import * as core from '@actions/core';
 import { type MockInstance, vi } from 'vitest';
-import type { Inputs } from './types';
+import type { NxCommandInputs } from './types';
 import { execPromisified, validateInputs } from './utilities';
 
-describe('nx tests', () => {
+describe('utilities tests', () => {
   let execPromisifiedMock: MockInstance;
 
   beforeEach(() => {
@@ -34,13 +34,13 @@ describe('nx tests', () => {
   });
 
   describe('validateInputs', () => {
-    let inputs: Inputs;
+    let inputs: NxCommandInputs;
 
     beforeEach(() => {
       // Default inputs
       inputs = {
-        affected: true,
-        all: false,
+        command: 'targetedAffected',
+        affectedToIgnore: [],
         args: [],
         baseBoundaryOverride: '',
         headBoundaryOverride: '',
@@ -48,82 +48,25 @@ describe('nx tests', () => {
         parallel: 3,
         projects: [],
         setNxBranchToPrNumber: false,
-        targets: [],
+        targets: ['build'],
         workingDirectory: '',
       };
     });
     test.each([
-      { affected: false, all: false, projects: ['projA'] },
-      { affected: false, all: true, projects: [] },
-      { affected: true, all: false, projects: [] },
-    ])('should return valid when affected: %s all: %s projects: %s', async ({ affected, all, projects }) => {
-      inputs.affected = affected;
-      inputs.all = all;
+      { command: 'targetedProjects', projects: ['projA'] },
+      { command: 'targetedAll', projects: [] },
+      { command: 'targetedAffected', projects: [] },
+    ])('should return valid when command: %s', async ({ command, projects }) => {
+      inputs.command = command as never;
       inputs.projects = projects;
 
       expect(validateInputs(inputs)).toBeUndefined();
     });
 
-    test.each([
-      // cant all be true
-      {
-        affected: true,
-        all: true,
-        projects: ['projA'],
-        error: 'Cannot have projects listed and affected or all true.',
-      },
-      // cant have projects and affected/all
-      {
-        affected: true,
-        all: false,
-        projects: ['projA'],
-        error: 'Cannot have projects listed and affected or all true.',
-      },
-      {
-        affected: false,
-        all: true,
-        projects: ['projA'],
-        error: 'Cannot have projects listed and affected or all true.',
-      },
-      // cant have all and projects/affected
-      {
-        affected: false,
-        all: true,
-        projects: ['projA'],
-        error: 'Cannot have projects listed and affected or all true.',
-      },
-      {
-        affected: true,
-        all: true,
-        projects: [],
-        error: 'Cannot have affected true and all true or projects listed.',
-      },
-      // cant have affected and projects/affected
-      {
-        affected: true,
-        all: false,
-        projects: ['projA'],
-        error: 'Cannot have projects listed and affected or all true.',
-      },
-      {
-        affected: true,
-        all: true,
-        projects: [],
-        error: 'Cannot have affected true and all true or projects listed.',
-      },
-      // cant all be false
-      {
-        affected: false,
-        all: false,
-        projects: [],
-        error: 'Must have all, affected, or projects listed.',
-      },
-    ])('Should throw an error when affected: %s %s', ({ affected, all, projects, error }) => {
-      inputs.affected = affected;
-      inputs.all = all;
-      inputs.projects = projects;
+    test('Should throw an error when invalid command', () => {
+      inputs.command = 'invalidCommand' as never;
 
-      expect(() => validateInputs(inputs)).toThrowError(error);
+      expect(() => validateInputs(inputs)).toThrowError(`Invalid command`);
     });
   });
 });
