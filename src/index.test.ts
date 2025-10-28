@@ -42,7 +42,7 @@ describe('nx command (index) tests', () => {
 
     // Default inputs
     inputs = {
-      command: 'targetedAffected',
+      command: 'runManyListedTargetsAndAffectedProjects',
       affectedToIgnore: [],
       args: [],
       baseBoundaryOverride: '',
@@ -68,7 +68,7 @@ describe('nx command (index) tests', () => {
 
     test.each([
       {
-        command: 'targetedProjects',
+        command: 'runManyListedTargetsAndListedProjects',
         projects: ['projA'],
         expected: undefined,
         runTargetedNxAll: 0,
@@ -77,7 +77,7 @@ describe('nx command (index) tests', () => {
         runShowNxAffectedList: 0,
       },
       {
-        command: 'targetedAll',
+        command: 'runManyListedTargetsAndAllProjects',
         projects: [],
         expected: undefined,
         runTargetedNxAll: 1,
@@ -86,7 +86,7 @@ describe('nx command (index) tests', () => {
         runShowNxAffectedList: 0,
       },
       {
-        command: 'targetedAffected',
+        command: 'runManyListedTargetsAndAffectedProjects',
         projects: [],
         expected: undefined,
         runTargetedNxAll: 0,

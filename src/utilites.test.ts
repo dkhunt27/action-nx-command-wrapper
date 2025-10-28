@@ -39,7 +39,7 @@ describe('utilities tests', () => {
     beforeEach(() => {
       // Default inputs
       inputs = {
-        command: 'targetedAffected',
+        command: 'runManyListedTargetsAndAffectedProjects',
         affectedToIgnore: [],
         args: [],
         baseBoundaryOverride: '',
@@ -53,9 +53,9 @@ describe('utilities tests', () => {
       };
     });
     test.each([
-      { command: 'targetedProjects', projects: ['projA'] },
-      { command: 'targetedAll', projects: [] },
-      { command: 'targetedAffected', projects: [] },
+      { command: 'runManyListedTargetsAndListedProjects', projects: ['projA'] },
+      { command: 'runManyListedTargetsAndAllProjects', projects: [] },
+      { command: 'runManyListedTargetsAndAffectedProjects', projects: [] },
       { command: 'showAffectedList', projects: [] },
     ])('should return valid when command: %s', async ({ command, projects }) => {
       inputs.command = command as never;
@@ -65,10 +65,15 @@ describe('utilities tests', () => {
     });
 
     test.each([
-      { command: 'targetedProjects', projects: [], targets: [], error: 'Projects cannot be empty' },
-      { command: 'targetedProjects', projects: ['projA'], targets: [], error: 'Targets cannot be empty' },
-      { command: 'targetedAll', projects: [], targets: [], error: 'Targets cannot be empty' },
-      { command: 'targetedAffected', projects: [], targets: [], error: 'Targets cannot be empty' },
+      { command: 'runManyListedTargetsAndListedProjects', projects: [], targets: [], error: 'Projects cannot be empty' },
+      {
+        command: 'runManyListedTargetsAndListedProjects',
+        projects: ['projA'],
+        targets: [],
+        error: 'Targets cannot be empty',
+      },
+      { command: 'runManyListedTargetsAndAllProjects', projects: [], targets: [], error: 'Targets cannot be empty' },
+      { command: 'runManyListedTargetsAndAffectedProjects', projects: [], targets: [], error: 'Targets cannot be empty' },
       { command: 'showAffectedList', projects: ['projA'], targets: [], error: 'Projects must be empty' },
     ])('Should throw an error when inputs are %s', ({ command, projects, targets, error }) => {
       inputs.command = command as never;

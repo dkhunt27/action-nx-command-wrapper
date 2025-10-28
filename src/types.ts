@@ -1,7 +1,11 @@
 export type NxCommandInputs = {
   affectedToIgnore: string[];
   args: string[];
-  command: 'targetedAll' | 'targetedProjects' | 'targetedAffected' | 'showAffectedList';
+  command:
+    | 'runManyListedTargetsAndAllProjects'
+    | 'runManyListedTargetsAndListedProjects'
+    | 'runManyListedTargetsAndAffectedProjects'
+    | 'showAffectedList';
   baseBoundaryOverride: string;
   headBoundaryOverride: string;
   isWorkflowsCiPipeline: boolean;

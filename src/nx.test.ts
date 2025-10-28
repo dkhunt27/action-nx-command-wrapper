@@ -29,7 +29,7 @@ describe('nx tests', () => {
 
     // Default inputs
     inputs = {
-      command: 'targetedAffected',
+      command: 'runManyListedTargetsAndAffectedProjects',
       affectedToIgnore: [],
       args: [],
       baseBoundaryOverride: '',
@@ -48,11 +48,11 @@ describe('nx tests', () => {
   });
 
   describe('runNxAll', () => {
-    test('when command is targetedAll, should run as expected', async () => {
+    test('when command is runManyListedTargetsAndAllProjects, should run as expected', async () => {
       execPromisifiedMock.mockResolvedValue('done');
 
       inputs.targets = ['build', 'test'];
-      inputs.command = 'targetedAll';
+      inputs.command = 'runManyListedTargetsAndAllProjects';
 
       await expect(runTargetedNxAll(inputs, [])).resolves.toBeUndefined();
 
@@ -63,11 +63,11 @@ describe('nx tests', () => {
   });
 
   describe('runNxAffected', () => {
-    test('when command is targetedAffected, should run as expected', async () => {
+    test('when command is runManyListedTargetsAndAffectedProjects, should run as expected', async () => {
       execPromisifiedMock.mockResolvedValue('done');
 
       inputs.targets = ['build', 'test'];
-      inputs.command = 'targetedAffected';
+      inputs.command = 'runManyListedTargetsAndAffectedProjects';
 
       await expect(runTargetedNxAffected(inputs, [])).resolves.toBeUndefined();
 
@@ -84,11 +84,11 @@ describe('nx tests', () => {
   });
 
   describe('runNxProjects', () => {
-    test('when command is targetedProjects, should run as expected', async () => {
+    test('when command is runManyListedTargetsAndListedProjects, should run as expected', async () => {
       execPromisifiedMock.mockResolvedValue('done');
 
       inputs.targets = ['build', 'test'];
-      inputs.command = 'targetedProjects';
+      inputs.command = 'runManyListedTargetsAndListedProjects';
       inputs.projects = ['project1', 'project2'];
 
       await expect(runTargetedNxProjects(inputs, [])).resolves.toBeUndefined();

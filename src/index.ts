@@ -24,11 +24,11 @@ export const runNx = async (inputs: NxCommandInputs): Promise<string[] | undefin
   }
 
   switch (inputs.command) {
-    case 'targetedAll':
+    case 'runManyListedTargetsAndAllProjects':
       return runTargetedNxAll(inputs, args);
-    case 'targetedProjects':
+    case 'runManyListedTargetsAndListedProjects':
       return runTargetedNxProjects(inputs, args);
-    case 'targetedAffected':
+    case 'runManyListedTargetsAndAffectedProjects':
       return runTargetedNxAffected(inputs, args);
     case 'showAffectedList':
       return runShowNxAffectedList(inputs, args);
