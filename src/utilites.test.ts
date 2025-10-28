@@ -1,11 +1,9 @@
 import * as core from '@actions/core';
-import { type MockInstance, vi } from 'vitest';
+import { vi } from 'vitest';
 import type { NxCommandInputs } from './types';
-import { execPromisified, validateInputs } from './utilities';
+import { executeCommand, validateInputs } from './utilities';
 
 describe('utilities tests', () => {
-  let execPromisifiedMock: MockInstance;
-
   beforeEach(() => {
     // silence logging
     vi.spyOn(core, 'info').mockImplementation(() => {});
@@ -13,23 +11,28 @@ describe('utilities tests', () => {
     vi.spyOn(core, 'startGroup').mockImplementation(() => {});
     vi.spyOn(core, 'endGroup').mockImplementation(() => {});
 
-    execPromisifiedMock = vi.fn();
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date('2024-01-01T12:00:00Z'));
   });
 
-  describe('execPromisified', async () => {
-    test('when exec returns stdout, should resolve', async () => {
-      execPromisifiedMock.mockResolvedValue({
-        stdout: 'stdout\n',
-        stderr: undefined,
-      });
-      await expect(execPromisified('some command', execPromisifiedMock)).resolves.toEqual(['stdout']);
+  afterEach(() => {
+    vi.resetAllMocks();
+    vi.useRealTimers();
+  });
+
+  describe('executeCommand', async () => {
+    test('when commands succeeds, should resolve', async () => {
+      await expect(executeCommand({ command: 'echo "Tue Oct 28 15:23:31 EDT 2025"' })).resolves.toEqual([
+        'Tue',
+        'Oct',
+        '28',
+        '15:23:31',
+        'EDT',
+        '2025',
+      ]);
     });
-    test('when exec returns stderr, should resolve', async () => {
-      execPromisifiedMock.mockResolvedValue({
-        stdout: 'stdout\n',
-        stderr: 'stderr',
-      });
-      await expect(execPromisified('some command', execPromisifiedMock)).rejects.toBe('stderr');
+    test('when command fails, should reject', async () => {
+      await expect(executeCommand({ command: `node -e "throw new Error('fail')"` })).rejects.toThrow();
     });
   });
 

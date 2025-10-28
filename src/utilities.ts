@@ -1,25 +1,98 @@
+import { exec } from 'node:child_process';
 import * as core from '@actions/core';
 import type { NxCommandInputs } from './types.ts';
 
-const util = require('node:util');
-const exec = util.promisify(require('node:child_process').exec);
+export const executeCommand = async (params: { command: string; override?: typeof exec }): Promise<string[]> => {
+  const { command, override } = params;
+  const execToUse = override ?? exec;
 
-export const execPromisified = async (command: string, execOverride?: typeof exec): Promise<string[]> => {
-  execOverride = execOverride ?? exec;
-  try {
-    const { stdout, stderr } = await execOverride(command);
-    if (stderr) {
-      throw stderr;
-    }
+  return new Promise<string[]>((resolve, reject) => {
+    execToUse(command, (error, stdout, stderr) => {
+      core.info(`stdout::`);
+      core.info(stdout);
 
-    return stdout
-      .split(/\s+/) // split on any whitespace including newlines
-      .map((x: string) => x.trim())
-      .filter((x: string) => x.length > 0);
-  } catch (error) {
-    core.error(`Error executing command "${command}": ${error}`);
-    throw error;
-  }
+      core.info(`stderr::`);
+      core.info(stderr);
+
+      if (error) {
+        core.info(`Command failed`);
+        core.error(error);
+        reject(stderr);
+        return;
+      }
+      core.info(`Command succeeded`);
+      return resolve(
+        stdout
+          .split(/\s+/) // split on any whitespace including newlines
+          .map((x: string) => x.trim())
+          .filter((x: string) => x.length > 0),
+      );
+    });
+  });
+
+  // return new Promise((resolve, reject) => {
+  //   const execution = spawnToUse(command);
+
+  //   execution.stdout?.setEncoding('utf8');
+
+  //   // biome-ignore lint/suspicious/noExplicitAny: using any for data event
+  //   execution.stdout?.on('data', (data: any) => {
+  //     stdout += data.toString();
+  //     core.info(data.toString());
+  //   });
+
+  //   // biome-ignore lint/suspicious/noExplicitAny: using any for data event
+  //   execution.stderr?.on('data', (data: any) => {
+  //     stderr += data.toString();
+  //     core.error(data.toString());
+  //   });
+
+  //   // biome-ignore lint/suspicious/noExplicitAny: using any for data event
+  //   execution.on('end', (data: any) => {
+  //     stdout += data.toString();
+  //     core.info(data.toString());
+  //   });
+
+  //   execution.on('close', (code) => {
+  //     if (code && code !== 0) {
+  //       core.error('child process exited with error ' + code?.toString());
+  //       return reject(
+  //         stderr
+  //           .split(/\s+/) // split on any whitespace including newlines
+  //           .map((x: string) => x.trim())
+  //           .filter((x: string) => x.length > 0),
+  //       );
+  //     }
+
+  //     core.info('child process exited with code ' + code?.toString());
+  //     return resolve(
+  //       stdout
+  //         .split(/\s+/) // split on any whitespace including newlines
+  //         .map((x: string) => x.trim())
+  //         .filter((x: string) => x.length > 0),
+  //     );
+  //   });
+
+  //   execution.on('exit', (code) => {
+  //     if (code && code !== 0) {
+  //       core.error('child process exited with error ' + code?.toString());
+  //       return reject(
+  //         stderr
+  //           .split(/\s+/) // split on any whitespace including newlines
+  //           .map((x: string) => x.trim())
+  //           .filter((x: string) => x.length > 0),
+  //       );
+  //     }
+
+  //     core.info('child process exited with code ' + code?.toString());
+  //     return resolve(
+  //       stdout
+  //         .split(/\s+/) // split on any whitespace including newlines
+  //         .map((x: string) => x.trim())
+  //         .filter((x: string) => x.length > 0),
+  //     );
+  //   });
+  // });
 };
 
 export const validateInputs = (inputs: NxCommandInputs): void => {

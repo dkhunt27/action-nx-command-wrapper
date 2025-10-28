@@ -20,9 +20,9 @@ vi.mock('@actions/github', () => {
 
 describe('nx command (index) tests', () => {
   let inputs: NxCommandInputs;
-  let runTargetedNxAllMock: MockInstance;
-  let runTargetedNxProjectsMock: MockInstance;
-  let runTargetedNxAffectedMock: MockInstance;
+  let runManyListedTargetsAndAllProjectsMock: MockInstance;
+  let runManyListedTargetsAndListedProjectsMock: MockInstance;
+  let runManyListedTargetsAndAffectedProjectsMock: MockInstance;
   let runShowNxAffectedListMock: MockInstance;
 
   beforeEach(() => {
@@ -32,9 +32,13 @@ describe('nx command (index) tests', () => {
     vi.spyOn(core, 'startGroup').mockImplementation(() => {});
     vi.spyOn(core, 'endGroup').mockImplementation(() => {});
 
-    runTargetedNxAllMock = vi.spyOn(nx, 'runTargetedNxAll').mockResolvedValue(undefined);
-    runTargetedNxProjectsMock = vi.spyOn(nx, 'runTargetedNxProjects').mockResolvedValue(undefined);
-    runTargetedNxAffectedMock = vi.spyOn(nx, 'runTargetedNxAffected').mockResolvedValue(undefined);
+    runManyListedTargetsAndAllProjectsMock = vi.spyOn(nx, 'runManyListedTargetsAndAllProjects').mockResolvedValue(undefined);
+    runManyListedTargetsAndListedProjectsMock = vi
+      .spyOn(nx, 'runManyListedTargetsAndListedProjects')
+      .mockResolvedValue(undefined);
+    runManyListedTargetsAndAffectedProjectsMock = vi
+      .spyOn(nx, 'runManyListedTargetsAndAffectedProjects')
+      .mockResolvedValue(undefined);
     runShowNxAffectedListMock = vi.spyOn(nx, 'runShowNxAffectedList').mockResolvedValue(['projA', 'projB']);
 
     // mark all inputs as valid
@@ -119,9 +123,9 @@ describe('nx command (index) tests', () => {
 
         await expect(runNx(inputs)).resolves.toEqual(expected);
 
-        expect(runTargetedNxAllMock).toHaveBeenCalledTimes(runTargetedNxAll);
-        expect(runTargetedNxProjectsMock).toHaveBeenCalledTimes(runTargetedNxProjects);
-        expect(runTargetedNxAffectedMock).toHaveBeenCalledTimes(runTargetedNxAffected);
+        expect(runManyListedTargetsAndAllProjectsMock).toHaveBeenCalledTimes(runTargetedNxAll);
+        expect(runManyListedTargetsAndListedProjectsMock).toHaveBeenCalledTimes(runTargetedNxProjects);
+        expect(runManyListedTargetsAndAffectedProjectsMock).toHaveBeenCalledTimes(runTargetedNxAffected);
         expect(runShowNxAffectedListMock).toHaveBeenCalledTimes(runShowNxAffectedList);
       },
     );
@@ -132,9 +136,9 @@ describe('nx command (index) tests', () => {
 
       await expect(runNx(inputs)).rejects.toThrow('Invalid command');
 
-      expect(runTargetedNxAllMock).toHaveBeenCalledTimes(0);
-      expect(runTargetedNxProjectsMock).toHaveBeenCalledTimes(0);
-      expect(runTargetedNxAffectedMock).toHaveBeenCalledTimes(0);
+      expect(runManyListedTargetsAndAllProjectsMock).toHaveBeenCalledTimes(0);
+      expect(runManyListedTargetsAndListedProjectsMock).toHaveBeenCalledTimes(0);
+      expect(runManyListedTargetsAndAffectedProjectsMock).toHaveBeenCalledTimes(0);
     });
 
     test('should not set env var when setNxBranchToPrNumber = false', async () => {
@@ -143,9 +147,9 @@ describe('nx command (index) tests', () => {
       await expect(runNx(inputs)).resolves.toBeUndefined();
 
       expect(process.env.NX_BRANCH).toBeUndefined();
-      expect(runTargetedNxAllMock).toHaveBeenCalledTimes(0);
-      expect(runTargetedNxProjectsMock).toHaveBeenCalledTimes(0);
-      expect(runTargetedNxAffectedMock).toHaveBeenCalledTimes(1);
+      expect(runManyListedTargetsAndAllProjectsMock).toHaveBeenCalledTimes(0);
+      expect(runManyListedTargetsAndListedProjectsMock).toHaveBeenCalledTimes(0);
+      expect(runManyListedTargetsAndAffectedProjectsMock).toHaveBeenCalledTimes(1);
     });
     test('should set env var when setNxBranchToPrNumber = true', async () => {
       inputs.setNxBranchToPrNumber = true;
@@ -153,9 +157,9 @@ describe('nx command (index) tests', () => {
       await expect(runNx(inputs)).resolves.toBeUndefined();
 
       expect(process.env.NX_BRANCH).toBe('27');
-      expect(runTargetedNxAllMock).toHaveBeenCalledTimes(0);
-      expect(runTargetedNxProjectsMock).toHaveBeenCalledTimes(0);
-      expect(runTargetedNxAffectedMock).toHaveBeenCalledTimes(1);
+      expect(runManyListedTargetsAndAllProjectsMock).toHaveBeenCalledTimes(0);
+      expect(runManyListedTargetsAndListedProjectsMock).toHaveBeenCalledTimes(0);
+      expect(runManyListedTargetsAndAffectedProjectsMock).toHaveBeenCalledTimes(1);
     });
   });
 });

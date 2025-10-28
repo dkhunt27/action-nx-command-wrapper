@@ -1,7 +1,12 @@
 import * as core from '@actions/core';
 import * as github from '@actions/github';
 import type { PullRequest } from '@octokit/webhooks-types';
-import { runShowNxAffectedList, runTargetedNxAffected, runTargetedNxAll, runTargetedNxProjects } from './nx.ts';
+import {
+  runManyListedTargetsAndAffectedProjects,
+  runManyListedTargetsAndAllProjects,
+  runManyListedTargetsAndListedProjects,
+  runShowNxAffectedList,
+} from './nx.ts';
 import type { NxCommandInputs } from './types.ts';
 import * as utils from './utilities.ts';
 
@@ -25,11 +30,11 @@ export const runNx = async (inputs: NxCommandInputs): Promise<string[] | undefin
 
   switch (inputs.command) {
     case 'runManyListedTargetsAndAllProjects':
-      return runTargetedNxAll(inputs, args);
+      return runManyListedTargetsAndAllProjects(inputs, args);
     case 'runManyListedTargetsAndListedProjects':
-      return runTargetedNxProjects(inputs, args);
+      return runManyListedTargetsAndListedProjects(inputs, args);
     case 'runManyListedTargetsAndAffectedProjects':
-      return runTargetedNxAffected(inputs, args);
+      return runManyListedTargetsAndAffectedProjects(inputs, args);
     case 'showAffectedList':
       return runShowNxAffectedList(inputs, args);
     default:
