@@ -112,6 +112,7 @@ export const validateInputs = (inputs: NxCommandInputs): void => {
       }
       break;
     case 'showAffectedList':
+      // this does not take targets
       if (inputs.projects.length > 0) {
         throw new Error(`Projects must be empty when command is ${inputs.command}.`);
       }

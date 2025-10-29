@@ -12,7 +12,7 @@ export const runManyListedTargetsAndAllProjects = async (inputs: NxCommandInputs
   for (const target of inputs.targets) {
     core.info(`Target: ${target}`);
 
-    const cmd = `npx nx run-many --target=${target} ${args.join(' ')}`;
+    const cmd = `npx --yes nx run-many --target=${target} ${args.join(' ')}`;
 
     core.info(`running command: ${cmd}`);
 
@@ -32,7 +32,7 @@ export const runManyListedTargetsAndListedProjects = async (inputs: NxCommandInp
   for (const target of inputs.targets) {
     core.info(`Target: ${target}`);
 
-    const cmd = `npx nx run-many --target=${target} --projects=${inputs.projects.join(',')} ${args.join(' ')}`;
+    const cmd = `npx --yes nx run-many --target=${target} --projects=${inputs.projects.join(',')} ${args.join(' ')}`;
 
     core.info(`running command: ${cmd}`);
 
@@ -65,7 +65,7 @@ export const runManyListedTargetsAndAffectedProjects = async (
   for (const target of inputs.targets) {
     core.info(`Target: ${target}`);
 
-    const cmd = `npx nx affected --target=${target} --base=${base} --head=${head} ${args.join(' ')}`;
+    const cmd = `npx --yes nx affected --target=${target} --base=${base} --head=${head} ${args.join(' ')}`;
 
     core.info(`running command: ${cmd}`);
 
@@ -95,7 +95,7 @@ export const runShowNxAffectedList = async (inputs: NxCommandInputs, args: strin
     args.push(`--withTarget=${inputs.targets.join(',')}`);
   }
 
-  const cmd = `npx nx show projects --affected --base=${base} --head=${head} ${args.join(' ')}`;
+  const cmd = `npx --yes nx show projects --affected --base=${base} --head=${head} ${args.join(' ')}`;
 
   core.info(`running command: ${cmd}`);
 

@@ -63,10 +63,10 @@ describe('nx tests', () => {
 
       expect(executeCommandMock).toHaveBeenCalledTimes(2);
       expect(executeCommandMock).toHaveBeenNthCalledWith(1, {
-        command: 'npx nx run-many --target=build ',
+        command: 'npx --yes nx run-many --target=build ',
       });
       expect(executeCommandMock).toHaveBeenNthCalledWith(2, {
-        command: 'npx nx run-many --target=test ',
+        command: 'npx --yes nx run-many --target=test ',
       });
     });
   });
@@ -82,10 +82,10 @@ describe('nx tests', () => {
 
       expect(executeCommandMock).toHaveBeenCalledTimes(2);
       expect(executeCommandMock).toHaveBeenNthCalledWith(1, {
-        command: 'npx nx affected --target=build --base=base-sha --head=head-sha ',
+        command: 'npx --yes nx affected --target=build --base=base-sha --head=head-sha ',
       });
       expect(executeCommandMock).toHaveBeenNthCalledWith(2, {
-        command: 'npx nx affected --target=test --base=base-sha --head=head-sha ',
+        command: 'npx --yes nx affected --target=test --base=base-sha --head=head-sha ',
       });
     });
   });
@@ -102,10 +102,10 @@ describe('nx tests', () => {
 
       expect(executeCommandMock).toHaveBeenCalledTimes(2);
       expect(executeCommandMock).toHaveBeenNthCalledWith(1, {
-        command: 'npx nx run-many --target=build --projects=project1,project2 ',
+        command: 'npx --yes nx run-many --target=build --projects=project1,project2 ',
       });
       expect(executeCommandMock).toHaveBeenNthCalledWith(2, {
-        command: 'npx nx run-many --target=test --projects=project1,project2 ',
+        command: 'npx --yes nx run-many --target=test --projects=project1,project2 ',
       });
     });
   });
@@ -122,7 +122,7 @@ describe('nx tests', () => {
 
       expect(executeCommandMock).toHaveBeenCalledTimes(1);
       expect(executeCommandMock).toHaveBeenCalledWith({
-        command: 'npx nx show projects --affected --base=base-sha --head=head-sha --withTarget=build,test',
+        command: 'npx --yes nx show projects --affected --base=base-sha --head=head-sha --withTarget=build,test',
       });
       expect(coreOutputMock).toHaveBeenCalledWith('affected', ['project1', 'project2']);
       expect(coreOutputMock).toHaveBeenCalledWith('hasAffected', true);
