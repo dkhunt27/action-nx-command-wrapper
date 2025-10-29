@@ -2,9 +2,9 @@ import * as core from '@actions/core';
 import * as github from '@actions/github';
 import * as gitUtils from './git-utilities.ts';
 import type { NxCommandInputs } from './types';
-import { execPromisified } from './utilities.ts';
+import { executeCommand } from './utilities.ts';
 
-export const runTargetedNxAll = async (inputs: NxCommandInputs, args: string[]): Promise<undefined> => {
+export const runManyListedTargetsAndAllProjects = async (inputs: NxCommandInputs, args: string[]): Promise<undefined> => {
   core.startGroup('Running NX All');
 
   const promises = [];
@@ -12,11 +12,11 @@ export const runTargetedNxAll = async (inputs: NxCommandInputs, args: string[]):
   for (const target of inputs.targets) {
     core.info(`Target: ${target}`);
 
-    const cmd = `npx nx run-many --target=${target} ${args.join(' ')}`;
+    const cmd = `npx --yes nx run-many --target=${target} ${args.join(' ')}`;
 
     core.info(`running command: ${cmd}`);
 
-    promises.push(execPromisified(cmd));
+    promises.push(executeCommand({ command: cmd }));
   }
 
   await Promise.all(promises);
@@ -24,7 +24,7 @@ export const runTargetedNxAll = async (inputs: NxCommandInputs, args: string[]):
   core.endGroup();
 };
 
-export const runTargetedNxProjects = async (inputs: NxCommandInputs, args: string[]): Promise<undefined> => {
+export const runManyListedTargetsAndListedProjects = async (inputs: NxCommandInputs, args: string[]): Promise<undefined> => {
   core.startGroup('Running NX Projects');
 
   const promises = [];
@@ -32,11 +32,11 @@ export const runTargetedNxProjects = async (inputs: NxCommandInputs, args: strin
   for (const target of inputs.targets) {
     core.info(`Target: ${target}`);
 
-    const cmd = `npx nx run-many --target=${target} --projects=${inputs.projects.join(',')} ${args.join(' ')}`;
+    const cmd = `npx --yes nx run-many --target=${target} --projects=${inputs.projects.join(',')} ${args.join(' ')}`;
 
     core.info(`running command: ${cmd}`);
 
-    promises.push(execPromisified(cmd));
+    promises.push(executeCommand({ command: cmd }));
   }
 
   await Promise.all(promises);
@@ -44,7 +44,10 @@ export const runTargetedNxProjects = async (inputs: NxCommandInputs, args: strin
   core.endGroup();
 };
 
-export const runTargetedNxAffected = async (inputs: NxCommandInputs, args: string[]): Promise<undefined> => {
+export const runManyListedTargetsAndAffectedProjects = async (
+  inputs: NxCommandInputs,
+  args: string[],
+): Promise<undefined> => {
   core.startGroup('Running NX Affected');
 
   core.info('Retrieving git boundaries...');
@@ -62,11 +65,11 @@ export const runTargetedNxAffected = async (inputs: NxCommandInputs, args: strin
   for (const target of inputs.targets) {
     core.info(`Target: ${target}`);
 
-    const cmd = `npx nx affected --target=${target} --base=${base} --head=${head} ${args.join(' ')}`;
+    const cmd = `npx --yes nx affected --target=${target} --base=${base} --head=${head} ${args.join(' ')}`;
 
     core.info(`running command: ${cmd}`);
 
-    promises.push(execPromisified(cmd));
+    promises.push(executeCommand({ command: cmd }));
   }
 
   await Promise.all(promises);
@@ -92,11 +95,11 @@ export const runShowNxAffectedList = async (inputs: NxCommandInputs, args: strin
     args.push(`--withTarget=${inputs.targets.join(',')}`);
   }
 
-  const cmd = `npx nx show projects --affected --base=${base} --head=${head} ${args.join(' ')}`;
+  const cmd = `npx --yes nx show projects --affected --base=${base} --head=${head} ${args.join(' ')}`;
 
   core.info(`running command: ${cmd}`);
 
-  const results = await execPromisified(cmd);
+  const results = await executeCommand({ command: cmd });
 
   const affected = results.filter((project) => !inputs.affectedToIgnore.includes(project));
 
