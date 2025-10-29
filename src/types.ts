@@ -9,7 +9,6 @@ export type NxCommandInputs = {
   baseBoundaryOverride: string;
   headBoundaryOverride: string;
   isWorkflowsCiPipeline: boolean;
-  parallel: number;
   projects: string[];
   setNxBranchToPrNumber: boolean;
   targets: string[];

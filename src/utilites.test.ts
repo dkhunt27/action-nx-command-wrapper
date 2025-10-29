@@ -48,7 +48,6 @@ describe('utilities tests', () => {
         baseBoundaryOverride: '',
         headBoundaryOverride: '',
         isWorkflowsCiPipeline: false,
-        parallel: 3,
         projects: [],
         setNxBranchToPrNumber: false,
         targets: ['build'],

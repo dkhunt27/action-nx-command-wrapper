@@ -24,10 +24,6 @@ export const runNx = async (inputs: NxCommandInputs): Promise<string[] | undefin
     }
   }
 
-  if (inputs.parallel) {
-    args.push(`--parallel=${inputs.parallel.toString()}`);
-  }
-
   switch (inputs.command) {
     case 'runManyListedTargetsAndAllProjects':
       return runManyListedTargetsAndAllProjects(inputs, args);

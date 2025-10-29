@@ -52,7 +52,6 @@ describe('nx command (index) tests', () => {
       baseBoundaryOverride: '',
       headBoundaryOverride: '',
       isWorkflowsCiPipeline: false,
-      parallel: 3,
       projects: [],
       setNxBranchToPrNumber: false,
       targets: [],
