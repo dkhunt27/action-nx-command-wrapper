@@ -1,6 +1,6 @@
 {
   "name": "action-nx-command-wrapper",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "Nx command wrapper for @dkhunt27/action-nx-command",
   "keywords": [
     "nx",
