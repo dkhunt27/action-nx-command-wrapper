@@ -25,7 +25,8 @@
     "dev": "tsdown --watch",
     "lint": "biome check --error-on-warnings",
     "format": "biome format --write",
-    "test": "vitest run --coverage"
+    "test": "vitest run --coverage",
+    "all": "npm run format && npm run lint && npm run test && npm run build"
   },
   "author": "dkhunt27@gmail.com",
   "repository": "github:dkhunt27/action-nx-command-wrapper",

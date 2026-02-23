@@ -1,7 +1,7 @@
 import type * as github from '@actions/github';
 import type { PullRequest, PushEvent } from '@octokit/webhooks-types';
 import type { NxCommandInputs } from './types';
-import { execPromisified } from './utilities';
+import { executeCommand } from './utilities';
 
 export const retrieveGitBoundaries = async (params: {
   inputs: NxCommandInputs;
@@ -25,13 +25,13 @@ export const retrieveGitBoundaries = async (params: {
     if (inputs.baseBoundaryOverride) {
       base = inputs.baseBoundaryOverride;
     } else {
-      base = (await execPromisified('git rev-parse HEAD~1'))[0];
+      base = (await executeCommand({ command: 'git rev-parse HEAD~1' }))[0];
     }
 
     if (inputs.headBoundaryOverride) {
       head = inputs.headBoundaryOverride;
     } else {
-      head = (await execPromisified('git rev-parse HEAD'))[0];
+      head = (await executeCommand({ command: 'git rev-parse HEAD' }))[0];
     }
   }
 

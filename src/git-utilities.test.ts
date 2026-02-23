@@ -8,11 +8,10 @@ describe('git-utilities tests', () => {
     vi.spyOn(core, 'info').mockImplementation(() => {});
     vi.spyOn(core, 'debug').mockImplementation(() => {});
     vi.spyOn(core, 'startGroup').mockImplementation(() => {});
-    vi.spyOn(utils, 'execPromisified');
-
-    vi.spyOn(utils, 'execPromisified').mockImplementation((ref) => {
-      if (ref.indexOf('HEAD~1') > -1) return Promise.resolve(['base-sha']);
-      if (ref.indexOf('HEAD') > -1) return Promise.resolve(['head-sha']);
+    vi.spyOn(utils, 'executeCommand').mockImplementation((params) => {
+      const { command } = params;
+      if (command.indexOf('HEAD~1') > -1) return Promise.resolve(['base-sha']);
+      if (command.indexOf('HEAD') > -1) return Promise.resolve(['head-sha']);
       return Promise.reject('unknown ref');
     });
   });
