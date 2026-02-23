@@ -87,8 +87,8 @@ export const runShowNxAffectedList = async (inputs: NxCommandInputs, args: strin
     githubContextPayload: github.context.payload,
   });
 
-  core.info(`Base boundary: ${base}aaa`);
-  core.info(`Head boundary: ${head}bbb`);
+  core.info(`Base boundary: ${base}`);
+  core.info(`Head boundary: ${head}`);
 
   if (inputs.targets.length > 0) {
     core.info(`Using targets: ${inputs.targets.join(',')}`);
